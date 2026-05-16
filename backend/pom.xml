@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.acme.ecommerce</groupId>
+        <artifactId>e-commerce-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>backend</artifactId>
+    <packaging>pom</packaging>
+    <name>E-Commerce — Backend</name>
+
+    <modules>
+        <module>auth</module>
+        <module>produits</module>
+        <module>paiement</module>
+        <module>crypto</module>
+    </modules>
+
+    <!--
+        Dépendances communes héritées par tous les sous-modules backend.
+        Versions volontairement anciennes pour exposer des CVE Trivy à la démo :
+          - log4j 1.2.17           → CVE-2021-4104, CVE-2019-17571 (log4shell-like)
+          - jackson-databind 2.9.x → plusieurs CVE désérialisation
+          - commons-text 1.9       → CVE-2022-42889 (Text4Shell)
+          - snakeyaml 1.30         → CVE-2022-1471
+          - commons-collections 3.2.1 → CVE-2015-7501
+          - guava 24.1-jre         → CVE-2018-10237, CVE-2023-2976
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.10.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.30</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>24.1-jre</version>
+        </dependency>
+    </dependencies>
+</project>
