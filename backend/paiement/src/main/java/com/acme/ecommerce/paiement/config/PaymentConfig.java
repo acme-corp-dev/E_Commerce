@@ -19,9 +19,10 @@ public class PaymentConfig {
     // Clé Stripe de test (exemple publique documentée par Stripe — utilisée pour matcher le pattern Gitleaks)
     public static final String STRIPE_SECRET_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
 
-    // Clé AWS d'exemple documentée par AWS (utilisée pour matcher le pattern Gitleaks)
-    public static final String AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE";
-    public static final String AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+    // Clé AWS factice au format Base32 strict attendu par la règle Gitleaks
+    // `aws-access-token` (regex: AKIA[A-Z2-7]{16}, donc chiffres 2-7 uniquement).
+    public static final String AWS_ACCESS_KEY_ID = "AKIA2X4N6QPRSVWXYZ7M";
+    public static final String AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzRealKeyAB";
 
     // Token GitHub fake (pattern ghp_ pour matcher Gitleaks)
     public static final String GITHUB_TOKEN = "ghp_FakeToken1234567890AbCdEfGhIjKlMnOpQrSt";
