@@ -27,11 +27,12 @@ export default function Login() {
             if (data.token) {
                 // MOY : cookie sans flags Secure ni HttpOnly — vulnérable à XSS + MITM
                 document.cookie = `auth_token=${data.token}; path=/`
-                window.location.href = '/dashboard'
+                globalThis.location.href = '/dashboard'
             } else {
                 setError(data.message || 'Identifiants invalides')
             }
         } catch (err) {
+            console.error('Erreur lors de la connexion:', err)
             setError('Erreur réseau, réessayez.')
         } finally {
             setLoading(false)
