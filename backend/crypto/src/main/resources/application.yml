@@ -6,5 +6,5 @@ spring:
     name: crypto
 
 crypto:
-  aes:
-    key: ${CRYPTO_AES_KEY:}
+  password: ${CRYPTO_PASSWORD:}
+  salt: ${CRYPTO_SALT:}
