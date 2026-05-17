@@ -1,5 +1,6 @@
 package com.acme.ecommerce.produits.repository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -15,11 +16,20 @@ import java.util.Map;
 @Repository
 public class ProduitRepository {
 
+    @Value("${app.datasource.url}")
+    private String dbUrl;
+
+    @Value("${app.datasource.username}")
+    private String dbUser;
+
+    @Value("${app.datasource.password}")
+    private String dbPassword;
+
     public List<Map<String, Object>> rechercherParNom(String nom) throws SQLException {
         List<Map<String, Object>> out = new ArrayList<>();
         String sql = "SELECT id, nom, prix FROM produits WHERE nom LIKE ?";
 
-        try (Connection conn = DriverManager.getConnection("jdbc:h2:mem:produits", "sa", "");
+        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + nom + "%");
             try (ResultSet rs = stmt.executeQuery()) {
