@@ -40,6 +40,14 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
+            <exclusions>
+                <!-- jjwt-jackson 0.11.5 tire jackson-databind 2.12.6.1 (CVE-2022-42003/42004).
+                     On exclut pour utiliser la version moderne (2.18.x) managée par Spring Boot. -->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
