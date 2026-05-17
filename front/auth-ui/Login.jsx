@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-// MOY : URL en HTTP au lieu de HTTPS — trafic auth en clair
-const API_URL = 'http://api.acme-corp.com/auth/login'
+const API_URL = 'https://api.acme-corp.com/auth/login'
 
 export default function Login() {
     const [email, setEmail] = useState('')
