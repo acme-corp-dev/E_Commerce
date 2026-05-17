@@ -2,6 +2,7 @@ package com.acme.ecommerce.auth.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -9,14 +10,12 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    /**
-     * FAILLE INTENTIONNELLE : secret JWT hardcodé dans le code source.
-     * Un attaquant qui accède au repo peut forger n'importe quel token.
-     * À remplacer par une lecture depuis Vault / variable d'environnement.
-     */
-    private static final String JWT_SECRET = "MySuperSecretKey-DO-NOT-PUSH-2026";
-
+    private final String jwtSecret;
     private static final long EXPIRATION_MS = 3600_000L;
+
+    public JwtService(@Value("${jwt.secret}") String jwtSecret) {
+        this.jwtSecret = jwtSecret;
+    }
 
     public String genererToken(String username, String role) {
         return Jwts.builder()
@@ -24,7 +23,7 @@ public class JwtService {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
-                .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
+                .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
 }

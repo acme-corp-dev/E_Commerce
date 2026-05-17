@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,30 +17,28 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    /**
-     * Endpoint de connexion utilisateur.
-     * FAILLE INTENTIONNELLE : injection SQL via concaténation directe du login.
-     * Un payload login="admin' OR '1'='1" contourne l'authentification.
-     */
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> body) throws SQLException {
         String login = body.get("login");
         String password = body.get("password");
 
-        Connection conn = DriverManager.getConnection("jdbc:h2:mem:auth", "sa", "");
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT id, role FROM users WHERE login='" + login
-                + "' AND password='" + password + "'";
-        ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT id, role FROM users WHERE login=? AND password=?";
 
-        Map<String, Object> result = new HashMap<>();
-        if (rs.next()) {
-            result.put("id", rs.getInt("id"));
-            result.put("role", rs.getString("role"));
-            result.put("authenticated", true);
-        } else {
-            result.put("authenticated", false);
+        try (Connection conn = DriverManager.getConnection("jdbc:h2:mem:auth", "sa", "");
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, login);
+            stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
+                Map<String, Object> result = new HashMap<>();
+                if (rs.next()) {
+                    result.put("id", rs.getInt("id"));
+                    result.put("role", rs.getString("role"));
+                    result.put("authenticated", true);
+                } else {
+                    result.put("authenticated", false);
+                }
+                return result;
+            }
         }
-        return result;
     }
 }
