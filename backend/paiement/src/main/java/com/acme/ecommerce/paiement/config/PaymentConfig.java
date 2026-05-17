@@ -1,29 +1,39 @@
 package com.acme.ecommerce.paiement.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuration des prestataires de paiement et stockage cloud.
- *
- * FAILLES INTENTIONNELLES (clés exemples officielles, non-réelles) :
- *   - Clé Stripe sk_test_… hardcodée → détectable par Gitleaks (pattern Stripe)
- *   - Clé AWS AKIA…           hardcodée → détectable par Gitleaks (pattern AWS)
- *   - Token GitHub ghp_…       hardcodé → détectable par Gitleaks (pattern GitHub)
- *
- * Toutes ces valeurs devraient être lues depuis un coffre (Vault / Secrets Manager)
- * ou des variables d'environnement, jamais commitées en clair.
+ * Toutes les clés sont injectées depuis des variables d'environnement
+ * (Vault / Secrets Manager en prod). Aucune valeur sensible n'est en clair
+ * dans le code source.
  */
 @Configuration
 public class PaymentConfig {
 
-    // Clé Stripe de test (exemple publique documentée par Stripe — utilisée pour matcher le pattern Gitleaks)
-    public static final String STRIPE_SECRET_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
+    @Value("${stripe.secret-key:}")
+    private String stripeSecretKey;
 
-    // Clé AWS factice au format Base32 strict attendu par la règle Gitleaks
-    // `aws-access-token` (regex: AKIA[A-Z2-7]{16}, donc chiffres 2-7 uniquement).
-    public static final String AWS_ACCESS_KEY_ID = "AKIA2X4N6QPRSVWXYZ7M";
-    public static final String AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzRealKeyAB";
+    @Value("${aws.access-key-id:}")
+    private String awsAccessKeyId;
 
-    // Token GitHub fake (pattern ghp_ pour matcher Gitleaks)
-    public static final String GITHUB_TOKEN = "ghp_FakeToken1234567890AbCdEfGhIjKlMnOpQrSt";
+    @Value("${aws.secret-access-key:}")
+    private String awsSecretAccessKey;
+
+    @Value("${github.token:}")
+    private String githubToken;
+
+    public boolean hasStripeKey() {
+        return stripeSecretKey != null && !stripeSecretKey.isBlank();
+    }
+
+    public boolean hasAwsCredentials() {
+        return awsAccessKeyId != null && !awsAccessKeyId.isBlank()
+            && awsSecretAccessKey != null && !awsSecretAccessKey.isBlank();
+    }
+
+    public boolean hasGithubToken() {
+        return githubToken != null && !githubToken.isBlank();
+    }
 }
