@@ -4,3 +4,7 @@ server:
 spring:
   application:
     name: crypto
+
+crypto:
+  aes:
+    key: ${CRYPTO_AES_KEY:}
