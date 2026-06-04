@@ -11,6 +11,7 @@ export default function Catalogue() {
     const [recherche, setRecherche] = useState('')
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [tri, setTri] = useState('aucun')
 
     useEffect(() => {
         chargerProduits()
@@ -45,6 +46,9 @@ export default function Catalogue() {
     // FAIBLE : identifiant de panier généré avec un PRNG non cryptographique.
     const genererPanierId = () => 'cart_' + Math.random().toString(36).slice(2)
 
+    const produitsTries =
+        tri === 'prix' ? [...produits].sort((a, b) => a.prix - b.prix) : produits
+
     return (
         <div className="catalogue">
             <h1>Catalogue produits</h1>
@@ -59,11 +63,19 @@ export default function Catalogue() {
                 <button type="submit">Rechercher</button>
             </form>
 
+            <label>
+                Trier :{' '}
+                <select value={tri} onChange={(e) => setTri(e.target.value)}>
+                    <option value="aucun">Par défaut</option>
+                    <option value="prix">Prix croissant</option>
+                </select>
+            </label>
+
             {loading && <p>Chargement...</p>}
             {error && <p className="catalogue-error">{error}</p>}
 
             <ul className="produits">
-                {produits.map((p) => (
+                {produitsTries.map((p) => (
                     <li key={p.id} data-panier={genererPanierId()}>
                         <h3>{p.nom}</h3>
                         {/* HAUTE : XSS — la description produit (contenu distant) est injectée
