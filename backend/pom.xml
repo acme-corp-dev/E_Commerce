@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.acme.ecommerce</groupId>
+        <artifactId>e-commerce-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>backend</artifactId>
+    <packaging>pom</packaging>
+    <name>E-Commerce — Backend</name>
+
+    <modules>
+        <module>auth</module>
+        <module>produits</module>
+        <module>paiement</module>
+        <module>crypto</module>
+    </modules>
+
+    <!--
+        Dépendances communes héritées par tous les sous-modules backend.
+        Le logging, JSON et YAML sont fournis par spring-boot-starter-web
+        (Logback + Jackson + SnakeYAML aux versions à jour patchées par Boot).
+        Aucune dépendance avec CVE active.
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+</project>

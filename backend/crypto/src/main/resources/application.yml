@@ -1,0 +1,10 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: crypto
+
+crypto:
+  password: ${CRYPTO_PASSWORD:}
+  salt: ${CRYPTO_SALT:}
